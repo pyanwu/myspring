@@ -11,7 +11,7 @@ public class ViewResolver {
     private File tempateRootDir;
 
     public ViewResolver(String templateRoot) {
-        String templateRootPath=this.getClass().getClass().getResource(templateRoot).getFile();
+        String templateRootPath=this.getClass().getClassLoader().getResource(templateRoot).getFile();
         this.tempateRootDir = new File(templateRootPath);
     }
 

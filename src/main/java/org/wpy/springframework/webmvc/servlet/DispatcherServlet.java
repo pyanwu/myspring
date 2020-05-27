@@ -50,10 +50,12 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void doDispatch(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        System.out.println("**********************************");
         //1、通过request拿到URL，去匹配一个HandlerMapping
         HandlerMapping handlerMapping=getHandlerMapping(req);
         if(handlerMapping==null){
             //404
+            resp.getWriter().println("404");
             return;
         }
         //2、根据HandlerMapping获得一个HandlerAdapter
@@ -193,6 +195,7 @@ public class DispatcherServlet extends HttpServlet {
                 continue;
             }
 
+
             //取Controller上的url
             String baseUrl="";
             if(clazz.isAnnotationPresent(RequestMapping.class)){
@@ -209,7 +212,7 @@ public class DispatcherServlet extends HttpServlet {
                 RequestMapping methodRequestMapping = method.getAnnotation(RequestMapping.class);
                 //方法上的url
                 String methodUrl = methodRequestMapping.value();
-                String regex=("/"+baseUrl+methodUrl.replaceAll("\\*",".*").replaceAll("/+","/"));
+                String regex=("/"+baseUrl+methodUrl.replaceAll("\\*",".*")).replaceAll("/+","/");
                 Pattern pattern= Pattern.compile(regex);
                 handlerMappings.add(new HandlerMapping(pattern,method,instance));
                 System.out.println("Mapped: "+regex+", "+method);
